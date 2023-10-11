@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Мировое время</title>
+  <style>
+    body {
+      text-align: center;
+      font-size: 26px;
+    }
+  </style>
+  <script>
+    function displayTime() {
+      var moscowTime = new Date().toLocaleTimeString('ru-RU', {timeZone: 'Europe/Moscow'});
+      document.getElementById('moscow-time').textContent = moscowTime;
+
+      var selectedTimezone = document.getElementById('timezone').value;
+      var selectedTime = new Date().toLocaleTimeString('ru-RU', {timeZone: selectedTimezone});
+      document.getElementById('selected-time').textContent = selectedTime;
+
+      var moscowDateTime = new Date();
+      var selectedDateTime = new Date(moscowDateTime.toLocaleString('en-US', {timeZone: selectedTimezone}));
+      var timeDifference = selectedDateTime - moscowDateTime;
+      var timeDifferenceInHours = Math.abs(timeDifference / 3600000); // Convert milliseconds to hours
+      document.getElementById('time-difference').textContent = timeDifferenceInHours.toFixed(2) + " часов";
+    }
+  </script>
+</head>
+<body onload="displayTime()">
+  <h1 id="moscow-time"></h1>
+  <p>Выберете нужную вам страну/город:</p>
+  <select id="timezone" onchange="displayTime()">
+    <option value="Europe/Moscow">Москва</option>
+    <option value="America/New_York">Нью-Йорк</option>
+    <option value="Asia/Tokyo">Токио</option>
+    <option value="Europe/London">Лондон</option>
+    <!-- Добавьте другие варианты по вашему выбору -->
+  </select>
+  <br><br>
+  <p>Или введите название города/страны:</p>
+  <input type="text" id="custom-location" placeholder="Город/Страна">
+  <button onclick="getCustomTime()">Получить время</button>
+  <br><br>
+  <h2 id="selected-time"></h2>
+  <p id="time-difference"></p>
+
+  <script>
+    function getCustomTime() {
+      var customLocation = document.getElementById('custom-location').value;
+      var timezone;
+      try {
+        timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      } catch (e) {
+        timezone = 'Europe/Moscow'; // Используем Московское время, если не удалось определить часовой пояс
+      }
+      var customTime = new Date().toLocaleTimeString('ru-RU', {timeZone: timezone, timeZoneName: 'short'});
+      document.getElementById('selected-time').textContent = customTime;
+      
+      var moscowDateTime = new Date();
+      var selectedDateTime = new Date(moscowDateTime.toLocaleString('en-US', {timeZone: timezone}));
+      var timeDifference = selectedDateTime - moscowDateTime;
+      var timeDifferenceInHours = Math.abs(timeDifference / 3600000); // Convert milliseconds to hours
+      document.getElementById('time-difference').textContent = timeDifferenceInHours.toFixed(2) + " часов";
+    }
+  </script>
+</body>
+</html>
