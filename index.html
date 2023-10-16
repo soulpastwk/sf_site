@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Мировые часы</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        h1 {
+            font-size: 26px;
+        }
+        select, input {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        #time-difference {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+    <script>
+        function displayTime() {
+            var timeElement = document.getElementById("moscow-time");
+            var currentTime = new Date();
+            var currentHours = currentTime.getHours();
+            var currentMinutes = currentTime.getMinutes();
+            var currentSeconds = currentTime.getSeconds();
+            // Проверка на однозначные числа и добавление ведущего нуля
+            currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
+            currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
+            // Отображение московского времени
+            timeElement.innerText = currentHours + ":" + currentMinutes + ":" + currentSeconds;
+            setTimeout(displayTime, 1000);
+        }
+
+        function getTimeDifference() {
+            var selectedCity = document.getElementById("city-select").value;
+            var timeDifference = 0;
+            // Определяем разницу во времени
+            switch (selectedCity) {
+                case "london":
+                    timeDifference = 3;
+                    break;
+                case "paris":
+                    timeDifference = 2;
+                    break;
+                case "new-york":
+                    timeDifference = 8;
+                    break;
+                // Добавьте другие города с их разницей во времени
+            }
+            var differenceElement = document.getElementById("time-difference");
+            differenceElement.innerText = "Разница во времени: " + timeDifference + " часов";
+        }
+    </script>
+</head>
+<body onload="displayTime()">
+    <h1 id="moscow-time"></h1>
+    
+    <p>Выберете нужную вам страну/город:</p>
+    <select id="city-select" onchange="getTimeDifference()">
+        <option value="london">Лондон</option>
+        <option value="paris">Париж</option>
+        <option value="new-york">Нью-Йорк</option>
+        <!-- Добавьте другие города в список -->
+    </select>
+    
+    <p>или введите город или страну:</p>
+    <input type="text" id="manual-input" onkeyup="getTimeDifference()">
+
+    <p id="time-difference"></p>
+</body>
+</html>
